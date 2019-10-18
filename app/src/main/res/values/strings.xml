@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">HTTPRequest</string>
+    <string name="activity_main_button_ipapi">IP API</string>
+    <string name="activity_ipapi_button_start">Lancer</string>
 </resources>

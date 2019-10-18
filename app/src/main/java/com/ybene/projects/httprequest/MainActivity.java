@@ -2,10 +2,16 @@ package com.ybene.projects.httprequest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.telecom.Call;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import com.ybene.projects.httprequest.tools.CallWebAPI;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -18,6 +24,7 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity {
 
     private TextView tvWebpage;
+    private Button buttonIPAPIActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         tvWebpage = findViewById(R.id.activity_main_webpage);
+        buttonIPAPIActivity = findViewById(R.id.activity_main_button_ipapi);
 
         URL url;
         HttpURLConnection urlConnection = null;
@@ -37,23 +45,46 @@ public class MainActivity extends AppCompatActivity {
             url = new URL("http://www.google.fr/");
             urlConnection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            // ======================
 
-            try {
+            // ===== PREMIERE IMPLEMENTATION =====
+/*            try {
                 readStream(in);
             } catch (IOException e) {
                 Log.e("IOException", e.getMessage());
-            }
+            }*/
+            // ===================================
 
+            // ===== DEUXIEME CORRECTION =====
+            // readStream(in);
+            // ===============================
+
+            // ===== URL EN PARAMETRE =====
+/*            URL newUrl = new URL("http://www.google.fr");
+            CallWebAPI callWebAPI = new CallWebAPI(tvWebpage);
+            callWebAPI.execute(newUrl.toString());*/
+            // ============================
+
+            in.close();
             urlConnection.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
             urlConnection.disconnect();
         }
+
+        buttonIPAPIActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, IPAPIActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void readStream(InputStream in) throws IOException {
 
-        // Buffer pour lire l'InputStream
+        // ===== PREMIERE IMPLEMENTATION =====
+ /*       // Buffer pour lire l'InputStream
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 
         // Création de la chaine de caractères finale
@@ -68,6 +99,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Affichage du code HTML sur l'activité
-        tvWebpage.setText(stringBuilder.toString());
+        tvWebpage.setText(stringBuilder.toString());*/
+        // ===================================
+
+        // ===== DEUXIEME CORRECTION =====
+        CallWebAPI callWebAPI = new CallWebAPI(tvWebpage);
+        callWebAPI.execute();
+        // ===============================
+
+        in.close();
     }
 }
